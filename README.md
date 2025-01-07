@@ -17,7 +17,7 @@ python main.py
 ```
 
 # DAY 1:
-Today I started off by following a tutorial on how to implement OAUTH 2.0 in relation to the Spotify API. Here is the link to that video: https://www.youtube.com/watch?v=olY_2MW4Eik&ab_channel=ImdadCodes
+Today I started off by following a tutorial on how to implement OAUTH 2.0 in relation to the Spotify API, and pull the json of my personal playlists to test. Here is the link to that video: https://www.youtube.com/watch?v=olY_2MW4Eik&ab_channel=ImdadCodes
 
 I now feel that I have a basic understanding of OAUTH, and I think that using flask is a great way to start creating a basic user interface without being overwhelmed by all the various facets that come with learning web or app development normally, especially whilst I try learning about how to interact with the API.
 
