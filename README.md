@@ -6,7 +6,7 @@ For this project, I am developing a flask app that will make calls to the Spotif
 
 # Requirements to Run:
 - Python3
-- You will also need to install the following packages, which can be done within your commandline or terminal as follows:
+- The following packages, which can be installed within your commandline or terminal as follows:
 ```
 pip install Flask requests python-dotenv
 ```
