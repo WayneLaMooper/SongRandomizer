@@ -6,8 +6,9 @@ For this project, I am developing a flask app that will make calls to the Spotif
 
 # Requirements to Run:
 - Python3
+- You will also need to install the following packages, which can be done in the commandline as follows:
 ```
-- pip install Flask requests python-dotenv
+pip install Flask requests python-dotenv
 ```
 - A spotify account so that you can login to the Spotify Developer portal and create your own dashboard. After creating your own dashboard, create a .env file within your cloned version of this repository and populate it with the CLIENT_ID and CLIENT_SECRET from your own dashboard.
 
