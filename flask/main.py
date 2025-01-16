@@ -24,11 +24,6 @@ AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 API_BASE_URL = 'https://api.spotify.com/v1/'
 
-#Welcome page
-@app.route('/')
-def index():
-    return "Welcome to my Spotify App <a href='/login'>Login with Spotify</a>"
-
 #Redirect to Spotify login and define the scope of what permissions we need to request
 @app.route('/login')
 def login():
@@ -44,7 +39,7 @@ def login():
 
     auth_url = f"{AUTH_URL}?{urllib.parse.urlencode(params)}"
 
-    return redirect(auth_url)
+    return jsonify({'auth_url': auth_url})
 
 #Accounting for the redirect back to the app once a user has attempted Spotify login, whether failed or successful
 @app.route('/callback')
@@ -68,7 +63,7 @@ def callback():
         session['refresh_token'] = token_info['refresh_token']
         session['expires_at'] = datetime.now().timestamp() + token_info['expires_in']
 
-        return redirect('/playlists')
+        return redirect('http://localhost:5173')
 
 #If Login is successful get playlists
 @app.route('/playlists')
