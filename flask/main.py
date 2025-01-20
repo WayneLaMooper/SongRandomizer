@@ -24,7 +24,7 @@ AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 API_BASE_URL = 'https://api.spotify.com/v1/'
 
-#Redirect to Spotify login and define the scope of what permissions we need to request
+#Create Authentication URL to redirect users to upon clicking the 'login' button on the front-end
 @app.route('/login')
 def login():
     scope = 'user-read-private user-read-email playlist-read-private'
