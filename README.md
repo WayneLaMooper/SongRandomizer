@@ -45,3 +45,25 @@ I will say that I ran a few circles within my own head trying to achieve some un
 I have begun looking into Docker files and containerization to automate the process of deploying and running my code for testing and development purposes. Not only will this make my life easier, but it is also good practice for ensuring that code can run on different environments and on different versions of images and dependencies. This will also be useful when it comes time to collaborating with other people on projects in the near future, which I am looking forward to.
 
 On the note of good practice though, I have quickly looked into Virtual Environments (venv) within Python, as many online sources that I have read or referenced often utilize this tool within their own Python projects. As I understand it, venv is used for managing packages within specific Python projects, effectively allowing me to control which packages are installed for specific Python projects I may have locally, separate of whatever packages may already be installed on my system. It may be redundant to do so in this project, given that I will most likely only have one Python application and intend on using Docker as well, but I have decided to try it out tonight just for the sake of developing what I believe to be good organizational habits for software development.
+
+# DAY 5:
+Building off of using venv from last night, today I have realized that venv only works on a local device. Thus, committing the venv directory to git does not really make sense, as people cloning the repository will not be able to use it. I have since removed the venv subdirectory from the repository and added it to the gitignore as a result.
+
+As I have learned, it is important to create the virtual environment before beginning to build a Python application if there is intent to use it, which can be done on Windows by entering the following commmand into the terminal when inside the intended directory:
+
+```
+python -m venv venv_directory_name  
+```
+Once the virtual environment is setup, it can be accessed via the next command within the terminal:
+```
+venv_directory_name\Scripts\activate
+```
+From here, I can now proceed to install the necessary dependencies for my Python application and generate a requirements.txt after, which will list all the dependencies installed specifically within the virtual environment by using the command:
+```
+pip freeze > requirements.txt
+```
+This requirements.txt file is crucial for ensuring that virtual environments for my other devices, or the devices of collaborators, contain the same dependencies. With this file, the same steps to creating a virtual environment can be followed, but instead of manually installing all the dependencies again, simply utilize the requirements.txt to install all of them with the command:
+```
+pip install -r requirements.txt
+```
+Worth noting here is that the requirements.txt file can be committed to the repository making it easier to distribute the same dependencies across multiple devices and their local virtual environments.
