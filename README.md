@@ -2,7 +2,7 @@
 
 Hello there, welcome to the start of my journey in creating a small app that will pick a random Python song! This project is the beginning of developing personal projects. As of right now, I am looking to just discover new pieces of music that I may have never otherwise heard, but hopefully I will be able to customize this project even more as I move further along.
 
-For this project, I am developing a flask app that will make calls to the Spotify Developer API. I will log any prerequesites that someone downloading this repository may need, as well as my progress here.
+For this project, I am developing an application that will involve a React + Vite frontend with a Flask backend for frontend that will make calls to the Spotify Developer API. I will log any prerequesites that someone downloading this repository may need, as well as my progress here!
 
 # Requirements to Run:
 - Python3
