@@ -4,18 +4,6 @@ Hello there, welcome to the start of my journey in creating a small app that wil
 
 For this project, I am developing an application that will involve a React + Vite frontend with a Flask backend for frontend that will make calls to the Spotify Developer API. I will log any prerequesites that someone downloading this repository may need, as well as my progress here!
 
-# Requirements to Run:
-- Python3
-- The following packages, which can be installed within your cloned repositories commandline or terminal as follows:
-```
-pip install Flask requests python-dotenv
-```
-- A spotify account so that you can login to the Spotify Developer portal and create your own dashboard. After creating your own dashboard, create a .env file within your cloned version of this repository and populate it with the CLIENT_ID and CLIENT_SECRET from your own dashboard.
-- Once all of the following requirements have been met, open the terminal within your cloned repository and enter the following command to run the application:
-```
-python main.py
-```
-
 # DAY 1:
 Today I started off by following a tutorial on how to implement OAUTH 2.0 in relation to the Spotify API and pull the Json of my personal playlists to test. Here is the link to that video: https://www.youtube.com/watch?v=olY_2MW4Eik&ab_channel=ImdadCodes
 
