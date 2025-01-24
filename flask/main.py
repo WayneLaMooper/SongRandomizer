@@ -27,6 +27,14 @@ API_BASE_URL = 'https://api.spotify.com/v1/'
 #Create Authentication URL to redirect users to upon clicking the 'login' button on the front-end
 @app.route('/login')
 def login():
+
+    #Reminder to create API to check if user already logged in
+    """
+    if 'access_token' in session:
+        auth_url = f"{'http://localhost:5173?success=true'}"
+        return jsonify({'auth_url': auth_url})
+    """   
+
     scope = 'user-read-private user-read-email playlist-read-private'
 
     params = {

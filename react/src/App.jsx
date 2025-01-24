@@ -13,6 +13,7 @@ function App() {
     const success = params.get('success');
     const error = params.get('error');
 
+
     if (success === 'true') {
       setLoginStatus(true);
     } else if (error) {
