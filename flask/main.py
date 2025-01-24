@@ -59,10 +59,12 @@ def callback():
         response = requests.post(TOKEN_URL, data=req_body)
         token_info = response.json()
 
+        #On a successful login retrieve tokens and store them in session
         session['access_token'] = token_info['access_token']
         session['refresh_token'] = token_info['refresh_token']
         session['expires_at'] = datetime.now().timestamp() + token_info['expires_in']
 
+        #Redirect back to the frontend with a true flag to indicate that login was successful
         return redirect('http://localhost:5173?success=true')
 
 #If Login is successful get playlists

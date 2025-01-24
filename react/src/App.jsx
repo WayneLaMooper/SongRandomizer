@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [loginStatus, setLoginStatus] = useState('false')
+  const [loginStatus, setLoginStatus] = useState(false)
 
   // Upon refresh of page check if user is logged in or not
   useEffect(() => {
@@ -14,9 +14,9 @@ function App() {
     const error = params.get('error');
 
     if (success === 'true') {
-      setLoginStatus('true');
+      setLoginStatus(true);
     } else if (error) {
-      setLoginStatus('false');
+      setLoginStatus(false);
     }
   }, []);
 
@@ -39,8 +39,10 @@ function App() {
     }
   };
 
-  const LoginPage = (prop) => {
-    if (prop.loginStatus === 'false') {
+  // Conditional rendering of page based on login status
+  const LoginPage = ({loginStatus}) => {
+    // If not logged in
+    if (loginStatus === false) {
       return (
         <div className="card">
           <button onClick={handleLoginClick}>
@@ -49,6 +51,7 @@ function App() {
         </div>
       )
     }
+    // If logged in
     return (
       <div>
         Logged in!
