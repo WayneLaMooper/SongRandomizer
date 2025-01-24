@@ -63,7 +63,7 @@ def callback():
         session['refresh_token'] = token_info['refresh_token']
         session['expires_at'] = datetime.now().timestamp() + token_info['expires_in']
 
-        return redirect('http://localhost:5173')
+        return redirect('http://localhost:5173?success=true')
 
 #If Login is successful get playlists
 @app.route('/playlists')

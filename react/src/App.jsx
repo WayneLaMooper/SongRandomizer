@@ -4,7 +4,21 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loginStatus, setLoginStatus] = useState('false')
+
+  // Upon refresh of page check if user is logged in or not
+  useEffect(() => {
+    // Retrieve login status of current user from backend
+    const params = new URLSearchParams(window.location.search);
+    const success = params.get('success');
+    const error = params.get('error');
+
+    if (success === 'true') {
+      setLoginStatus('true');
+    } else if (error) {
+      setLoginStatus('false');
+    }
+  }, []);
 
   const handleLoginClick = async () => {
     // Send a request to Flask to initiate the OAuth flow
@@ -25,31 +39,26 @@ function App() {
     }
   };
 
+  const LoginPage = (prop) => {
+    if (prop.loginStatus === 'false') {
+      return (
+        <div className="card">
+          <button onClick={handleLoginClick}>
+            Login
+          </button>
+        </div>
+      )
+    }
+    return (
+      <div>
+        Logged in!
+      </div>
+    )
+  }
+
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <button onClick={handleLoginClick}>
-          Login
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <LoginPage loginStatus={loginStatus}/>
     </>
   )
 }
