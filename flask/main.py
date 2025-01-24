@@ -35,7 +35,7 @@ def login():
         return jsonify({'auth_url': auth_url})
     """   
 
-    scope = 'user-read-private user-read-email playlist-read-private'
+    scope = 'user-read-private user-read-email playlist-read-private user-read-currently-playing'
 
     params = {
         'client_id': CLIENT_ID,
@@ -74,10 +74,33 @@ def callback():
 
         #Redirect back to the frontend with a true flag to indicate that login was successful
         return redirect('http://localhost:5173?success=true')
+    
+#If Login is successful get current track    
+@app.route('/current_track')
+def get_current_track():
+    session['api_url'] = '/current_track'
+
+    if 'access_token' not in session:
+        return redirect('/login')
+    
+    if datetime.now().timestamp() > session['expires_at']:
+        return redirect('/refresh-token')
+    
+    headers = {
+        'Authorization': f"Bearer {session['access_token']}"
+    }
+
+    response = requests.get(API_BASE_URL + 'me/player/currently-playing', headers=headers)
+    current_track = response.json()
+    name = current_track['item']['name']
+
+    return jsonify({'name':name})
 
 #If Login is successful get playlists
 @app.route('/playlists')
 def get_playlists():
+    session['api_url'] = '/playlists'
+
     if 'access_token' not in session:
         return redirect('/login')
     
@@ -113,7 +136,7 @@ def refresh_token():
     session['access_token'] = new_token_info['access_token']
     session['expires_at'] = datetime.now().timestamp() + new_token_info['expires_in']
 
-    return redirect('/playlists')
+    return redirect(session['api_url'])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug = True)
