@@ -76,7 +76,6 @@ function App() {
 
       if (response.ok) {
         const data = await response.json()
-        console.log(data)
         setPlaylists(data.items)
       } else {
         console.error('Failed to get current track')
@@ -114,9 +113,15 @@ function App() {
     }
     return (
       <div>
-        Logged in!
-        {currentTrack}
-        {playlists[0].name}
+        Logged in! <br/>
+        Now Playing: {currentTrack} <br/>
+        Playlists: <br/>
+        <ul>
+          {playlists.map(playlist =>
+             <li key={playlist.id}>
+                {playlist.name}
+              </li>)}
+        </ul>
       </div>
     )
   }
