@@ -6,12 +6,14 @@ import './App.css'
 function App() {
   const [loginStatus, setLoginStatus] = useState(false)
   const [currentTrack, setCurrentTrack] = useState('')
+  const [playlists, setPlaylists] = useState([])
 
   // Upon refresh of page check if user is logged in or not
   useEffect(() => {
 
     getLoginStatus()
     getCurrentTrack()
+    getPlaylists()
 
   }, [])
 
@@ -65,6 +67,25 @@ function App() {
     }
   }
 
+  const getPlaylists = async () => {
+    // Send a request to Flask to retrieve current track
+    try {
+      const response = await fetch('/api/playlists', {
+        method: 'GET',
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        console.log(data)
+        setPlaylists(data.items)
+      } else {
+        console.error('Failed to get current track')
+      }
+    } catch (error) {
+      console.error('Error getting current track:', data)
+    }
+  }
+
   // Conditional rendering of page based on login status
   const LoginPage = ({loginStatus}) => {
     // If not logged in
@@ -79,9 +100,23 @@ function App() {
     }
     // If logged in
     return (
+      <LoggedInPage />
+    )
+  }
+
+  const LoggedInPage = () => {
+    if (playlists.length === 0) {
+      return (
+        <div>
+          Loading...
+        </div>
+      )
+    }
+    return (
       <div>
         Logged in!
         {currentTrack}
+        {playlists[0].name}
       </div>
     )
   }

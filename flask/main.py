@@ -96,6 +96,26 @@ def get_current_track():
 
     return jsonify({'name':name})
 
+#If Login is sucessful get categories
+@app.route('/categories')
+def get_categories():
+    session['api_url'] = '/categories'
+
+    if 'access_token' not in session:
+        return redirect('/login')
+    
+    if datetime.now().timestamp() > session['expires_at']:
+        return redirect('/refresh-token')
+    
+    headers = {
+        'Authorization': f"Bearer {session['access_token']}"
+    }
+
+    response = requests.get(API_BASE_URL + 'browse/categories?offset=30&limit=50', headers=headers)
+    categories = response.json()
+
+    return jsonify(categories)
+
 #If Login is successful get playlists
 @app.route('/playlists')
 def get_playlists():
