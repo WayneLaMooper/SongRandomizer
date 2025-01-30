@@ -87,7 +87,7 @@ def get_current_track():
         return jsonify({"redirect":LOGIN_URL})
     
     if datetime.now().timestamp() > session['expires_at']:
-        return redirect('/refresh-token')
+        redirect('/refresh-token')
     
     headers = {
         'Authorization': f"Bearer {session['access_token']}"
@@ -108,7 +108,7 @@ def get_categories():
         return jsonify({"redirect":LOGIN_URL})
     
     if datetime.now().timestamp() > session['expires_at']:
-        return redirect('/refresh-token')
+        redirect('/refresh-token')
     
     headers = {
         'Authorization': f"Bearer {session['access_token']}"
@@ -127,8 +127,9 @@ def get_playlists():
     if 'access_token' not in session:
         return jsonify({"redirect":LOGIN_URL})
     
+    print(session['expires_at'])
     if datetime.now().timestamp() > session['expires_at']:
-        return redirect('/refresh-token')
+        redirect('/refresh-token')
     
     headers = {
         'Authorization': f"Bearer {session['access_token']}"
