@@ -17,25 +17,6 @@ function App() {
 
   }, [])
 
-  const handleLoginClick = async () => {
-    // Send a request to Flask to initiate the OAuth flow
-    try {
-      const response = await fetch('/api/login', {
-        method: 'GET',
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        // Redirect the user to the OAuth provider's login page
-        window.location.href = data.auth_url
-      } else {
-        console.error('Failed to get OAuth URL')
-      }
-    } catch (error) {
-      console.error('Error initiating OAuth:', data)
-    }
-  }
-
   const getLoginStatus = () => {
         // Retrieve login status of current user from backend
         const params = new URLSearchParams(window.location.search)
@@ -49,40 +30,59 @@ function App() {
         }
   }
 
-  const getCurrentTrack = async () => {
+  const getCurrentTrack = () => {
     // Send a request to Flask to retrieve current track
-    try {
-      const response = await fetch('/api/current_track', {
-        method: 'GET',
+    fetch('/api/current_track')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error connecting to current track api')
+        }
+        return response.json()
       })
-
-      if (response.ok) {
-        const data = await response.json()
+      .then(data => {
         setCurrentTrack(data.name)
-      } else {
-        console.error('Failed to get current track')
-      }
-    } catch (error) {
-      console.error('Error getting current track:', data)
-    }
+      })
+      .catch(error => {
+        console.error('Error retrieving current track:', error)
+      })
   }
 
-  const getPlaylists = async () => {
-    // Send a request to Flask to retrieve current track
-    try {
-      const response = await fetch('/api/playlists', {
-        method: 'GET',
+  const getPlaylists = () => {
+    // Send a request to Flask to retrieve all playlists
+    fetch('/api/all_playlists')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error connecting to all playlists api')
+        }
+        return response.json()
       })
-
-      if (response.ok) {
-        const data = await response.json()
+      .then(data => {
         setPlaylists(data.items)
-      } else {
-        console.error('Failed to get current track')
-      }
-    } catch (error) {
-      console.error('Error getting current track:', data)
-    }
+      })
+      .catch(error => {
+        console.error('Error retrieving playlists:', error)
+      })
+  }
+
+  const handleLoginClick = async () => {
+    // Send a request to Flask to initiate the OAuth flow by first receiving a link to redirect to Spotify
+    fetch('/api/login')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error connecting to login api')
+        }
+        return response.json()
+      })
+      .then(data => {
+        window.location.href = data.auth_url
+      })
+      .catch(error => {
+        console.error('Error retrieving login redirect:', error)
+      })
+  }
+
+  const handleShuffleClick = () => {
+
   }
 
   // Conditional rendering of page based on login status
@@ -119,7 +119,10 @@ function App() {
         <ul>
           {playlists.map(playlist =>
              <li key={playlist.id}>
-                {playlist.name}
+                {playlist.name} <br/>
+                <button onClick={()=>handleShuffleClick()}>
+                  Shuffle
+                </button>
               </li>)}
         </ul>
       </div>

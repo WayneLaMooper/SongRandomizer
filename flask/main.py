@@ -117,9 +117,9 @@ def get_categories():
     return jsonify(categories)
 
 #If Login is successful get playlists
-@app.route('/playlists')
+@app.route('/all_playlists')
 def get_playlists():
-    session['api_url'] = '/playlists'
+    session['api_url'] = '/all_playlists'
 
     if 'access_token' not in session:
         return redirect('/login')
