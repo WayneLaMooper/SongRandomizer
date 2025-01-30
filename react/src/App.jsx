@@ -10,7 +10,8 @@ function App() {
 
   // Upon refresh of page check if user is logged in or not
   useEffect(() => {
-
+    // Check the success flag in URL before calling any APIs
+    // If access or refresh token is not found, API calls will setLoginStatus to false, but getLoginStatus will not be executed to overwrite this action
     getLoginStatus()
     getCurrentTrack()
     getPlaylists()
@@ -40,6 +41,10 @@ function App() {
         return response.json()
       })
       .then(data => {
+        // Redirect is only present if there is no access or refresh token, then load login page
+        if (data.redirect) {
+          setLoginStatus(false)
+        }
         setCurrentTrack(data.name)
       })
       .catch(error => {
@@ -57,6 +62,9 @@ function App() {
         return response.json()
       })
       .then(data => {
+        if (data.redirect) {
+          setLoginStatus(false)
+        }
         setPlaylists(data.items)
       })
       .catch(error => {

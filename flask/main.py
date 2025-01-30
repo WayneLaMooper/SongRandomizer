@@ -24,6 +24,8 @@ AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 API_BASE_URL = 'https://api.spotify.com/v1/'
 
+LOGIN_URL = 'http://localhost:5173?success=false'
+
 #Create Authentication URL to redirect users to upon clicking the 'login' button on the front-end
 @app.route('/login')
 def login():
@@ -48,6 +50,7 @@ def login():
     auth_url = f"{AUTH_URL}?{urllib.parse.urlencode(params)}"
 
     return jsonify({'auth_url': auth_url})
+
 
 #Accounting for the redirect back to the app once a user has attempted Spotify login, whether failed or successful
 @app.route('/callback')
@@ -81,7 +84,7 @@ def get_current_track():
     session['api_url'] = '/current_track'
 
     if 'access_token' not in session:
-        return redirect('/login')
+        return jsonify({"redirect":LOGIN_URL})
     
     if datetime.now().timestamp() > session['expires_at']:
         return redirect('/refresh-token')
@@ -102,7 +105,7 @@ def get_categories():
     session['api_url'] = '/categories'
 
     if 'access_token' not in session:
-        return redirect('/login')
+        return jsonify({"redirect":LOGIN_URL})
     
     if datetime.now().timestamp() > session['expires_at']:
         return redirect('/refresh-token')
@@ -122,7 +125,7 @@ def get_playlists():
     session['api_url'] = '/all_playlists'
 
     if 'access_token' not in session:
-        return redirect('/login')
+        return jsonify({"redirect":LOGIN_URL})
     
     if datetime.now().timestamp() > session['expires_at']:
         return redirect('/refresh-token')
@@ -140,7 +143,7 @@ def get_playlists():
 @app.route('/refresh-token')
 def refresh_token():
     if 'refresh_token' not in session:
-        return redirect('/login')
+        return jsonify({"redirect":LOGIN_URL})
     
     if datetime.now().timestamp() > session['expires_at']:
         req_body = {
