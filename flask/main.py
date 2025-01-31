@@ -87,13 +87,20 @@ def get_current_track():
         return jsonify({"redirect":LOGIN_URL})
     
     if datetime.now().timestamp() > session['expires_at']:
-        redirect('/refresh-token')
+        refresh = True
+        return jsonify({'refresh':refresh})
     
     headers = {
         'Authorization': f"Bearer {session['access_token']}"
     }
 
     response = requests.get(API_BASE_URL + 'me/player/currently-playing', headers=headers)
+
+    #Consider when no track is currently playing
+    if response.status_code != 200:
+        name = 'No Track Playing Currently'
+        return jsonify({'name':name})
+    
     current_track = response.json()
     name = current_track['item']['name']
 
@@ -108,7 +115,8 @@ def get_categories():
         return jsonify({"redirect":LOGIN_URL})
     
     if datetime.now().timestamp() > session['expires_at']:
-        redirect('/refresh-token')
+        refresh = True
+        return jsonify({'refresh':refresh})
     
     headers = {
         'Authorization': f"Bearer {session['access_token']}"
@@ -127,9 +135,9 @@ def get_playlists():
     if 'access_token' not in session:
         return jsonify({"redirect":LOGIN_URL})
     
-    print(session['expires_at'])
     if datetime.now().timestamp() > session['expires_at']:
-        redirect('/refresh-token')
+        refresh = True
+        return jsonify({'refresh':refresh})
     
     headers = {
         'Authorization': f"Bearer {session['access_token']}"
@@ -143,6 +151,7 @@ def get_playlists():
 #Refresh Access Token
 @app.route('/refresh-token')
 def refresh_token():
+    print('Trying to refresh')
     if 'refresh_token' not in session:
         return jsonify({"redirect":LOGIN_URL})
     
@@ -160,7 +169,8 @@ def refresh_token():
     session['access_token'] = new_token_info['access_token']
     session['expires_at'] = datetime.now().timestamp() + new_token_info['expires_in']
 
-    return redirect(session['api_url'])
+    refreshed = True
+    return jsonify({'refreshed':refreshed})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug = True)
