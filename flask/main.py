@@ -7,11 +7,6 @@ from dotenv import load_dotenv
 import urllib.parse
 #Retrieve current date and time
 from datetime import datetime
-#Randomization
-import random
-import string
-from hashlib import sha256
-import base64
 
 #Steamline the process of creating a basic web app
 from flask import Flask, redirect, request, jsonify, session
@@ -22,11 +17,8 @@ app.secret_key = '53d355f8-571a-4590-a310-1f9579440851'
 
 #Create constants
 CLIENT_ID = os.getenv('CLIENT_ID')
-# CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 REDIRECT_URI = 'http://localhost:5000/callback'
-
-CODE_VERIFIER_LENGTH = 64
-CODE_CHALLENGE_METHOD = 'S256'
 
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
@@ -43,25 +35,8 @@ def login():
     if 'access_token' in session:
         auth_url = f"{'http://localhost:5173?success=true'}"
         return jsonify({'auth_url': auth_url})
-    """
+    """   
 
-    #First generate a random 64 character long string
-    code_verifier = ''.join(random.SystemRandom().choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(CODE_VERIFIER_LENGTH))
-
-    #Encode the string into UTF-8 and then hash with SHA 256
-    code_verifier_bytes = code_verifier.encode('utf-8')
-    hashed_verifier = sha256(code_verifier_bytes).digest()
-
-    #Encode the digest into base64
-    base_encoded_verifier = base64.b64encode(hashed_verifier).decode('utf-8')
-
-    #Make the code challenge URL safe
-    code_challenge = base_encoded_verifier.replace('=', '').replace('+','-').replace('/','_')
-    print(code_challenge)
-
-    session['code_verifier'] = code_verifier
-
-    #Scope determines the permissions the user will grant
     scope = 'user-read-private user-read-email playlist-read-private user-read-currently-playing'
 
     params = {
@@ -69,14 +44,13 @@ def login():
         'response_type': 'code',
         'scope': scope,
         'redirect_uri': REDIRECT_URI,
-        'code_challenge_method': CODE_CHALLENGE_METHOD,
-        'code_challenge': code_challenge,
         'show_dialog': True
     }
 
     auth_url = f"{AUTH_URL}?{urllib.parse.urlencode(params)}"
 
     return jsonify({'auth_url': auth_url})
+
 
 #Accounting for the redirect back to the app once a user has attempted Spotify login, whether failed or successful
 @app.route('/callback')
@@ -90,8 +64,7 @@ def callback():
             'grant_type': 'authorization_code',
             'redirect_uri': REDIRECT_URI,
             'client_id': CLIENT_ID,
-            # 'client_secret': CLIENT_SECRET
-            'code_verifier': session['code_verifier']
+            'client_secret': CLIENT_SECRET
         }
 
         response = requests.post(TOKEN_URL, data=req_body)
@@ -187,7 +160,7 @@ def refresh_token():
             'grant_type': 'refresh_token',
             'refresh_token': session['refresh_token'],
             'client_id': CLIENT_ID,
-            # 'client_secret': CLIENT_SECRET
+            'client_secret': CLIENT_SECRET
         }
 
     response = requests.post(TOKEN_URL, data=req_body)
