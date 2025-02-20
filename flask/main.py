@@ -22,7 +22,7 @@ app.secret_key = '53d355f8-571a-4590-a310-1f9579440851'
 
 #Create constants
 CLIENT_ID = os.getenv('CLIENT_ID')
-CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+# CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 REDIRECT_URI = 'http://localhost:5000/callback'
 
 CODE_VERIFIER_LENGTH = 64
@@ -187,7 +187,7 @@ def refresh_token():
             'grant_type': 'refresh_token',
             'refresh_token': session['refresh_token'],
             'client_id': CLIENT_ID,
-            'client_secret': CLIENT_SECRET
+            # 'client_secret': CLIENT_SECRET
         }
 
     response = requests.post(TOKEN_URL, data=req_body)
